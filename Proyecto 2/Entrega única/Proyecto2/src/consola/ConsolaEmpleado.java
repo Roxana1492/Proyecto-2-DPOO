@@ -3,6 +3,7 @@ package consola;
 import java.util.List;
 
 import fachada.FachadaTorneos;
+import fachada.OperacionesComercio;
 
 /**
  * Consola de entrenadores y fisioterapeutas. Pueden inscribirse a torneos
@@ -10,8 +11,8 @@ import fachada.FachadaTorneos;
  */
 public class ConsolaEmpleado extends ConsolaBase {
 
-    public ConsolaEmpleado(FachadaTorneos fachada, LectorEntradas lector) {
-        super(fachada, lector);
+    public ConsolaEmpleado(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {
+        super(fachada, comercio, lector);
     }
 
     @Override
@@ -31,11 +32,12 @@ public class ConsolaEmpleado extends ConsolaBase {
         lector.mostrar("  2. Salirme de un torneo");
         lector.mostrar("  3. Ver mis torneos");
         lector.mostrar("  4. Consultar torneos");
+        lector.mostrar("  5. Solicitar cambio de turno");
     }
 
     @Override
     protected int cantidadOpciones() {
-        return 4;
+        return 5;
     }
 
     @Override
@@ -45,6 +47,7 @@ public class ConsolaEmpleado extends ConsolaBase {
             case 2 -> ejecutar(this::desinscribirse);
             case 3 -> mostrarLista("Mis torneos", fachada.listarMisTorneos(loginActual));
             case 4 -> consultarTorneos();
+            case 5 -> ejecutar(this::solicitarCambioTurno);
             default -> lector.mostrar("Opción no válida.");
         }
         return true;
@@ -74,5 +77,16 @@ public class ConsolaEmpleado extends ConsolaBase {
             fachada.desinscribir(loginActual, id);
             lector.mostrar("Se liberó su cupo.");
         }
+    }
+
+    private void solicitarCambioTurno() {
+        List<String> turnos = comercio.listarTurnos();
+        mostrarLista("Turnos", turnos);
+        if (turnos.isEmpty()) {
+            return;
+        }
+        int turno = lector.leerEntero("Número del turno que quiere cambiar:", 1, turnos.size());
+        String reemplazo = lector.leerTextoNoVacio("Id del empleado que lo reemplaza:");
+        lector.mostrar(comercio.solicitarCambioTurno(turno, reemplazo));
     }
 }

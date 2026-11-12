@@ -1,9 +1,12 @@
 package consola;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import fachada.FachadaTorneos;
+import fachada.OperacionesComercio;
 
 /**
  * Consola del administrador: crea torneos, los inicia, registra resultados,
@@ -15,8 +18,8 @@ public class ConsolaAdministrador extends ConsolaBase {
     private static final List<String> MODALIDADES = List.of("CONJUNTO", "INDIVIDUAL", "DOBLES");
     private static final List<String> NIVELES = List.of("PRINCIPIANTE", "INTERMEDIO", "AVANZADO");
 
-    public ConsolaAdministrador(FachadaTorneos fachada, LectorEntradas lector) {
-        super(fachada, lector);
+    public ConsolaAdministrador(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {
+        super(fachada, comercio, lector);
     }
 
     @Override
@@ -37,11 +40,12 @@ public class ConsolaAdministrador extends ConsolaBase {
         lector.mostrar("  3. Registrar resultado de un encuentro");
         lector.mostrar("  4. Finalizar torneo");
         lector.mostrar("  5. Consultar torneos");
+        lector.mostrar("  6. Reporte de ventas (tienda y cafetería)");
     }
 
     @Override
     protected int cantidadOpciones() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -52,6 +56,7 @@ public class ConsolaAdministrador extends ConsolaBase {
             case 3 -> ejecutar(this::registrarResultado);
             case 4 -> ejecutar(this::finalizarTorneo);
             case 5 -> consultarTorneos();
+            case 6 -> ejecutar(this::generarReporte);
             default -> lector.mostrar("Opción no válida.");
         }
         return true;
@@ -111,6 +116,16 @@ public class ConsolaAdministrador extends ConsolaBase {
             fachada.finalizarTorneo(loginActual, id);
             lector.mostrar(fachada.consultarDetalleTorneo(id));
         }
+    }
+
+    private void generarReporte() {
+        String tipo = lector.leerOpcion("Tipo de reporte:", List.of("tienda", "cafeteria", "ventas", "todos"));
+        LocalDate desde = lector.leerFecha("Fecha inicial");
+        LocalDate hasta = lector.leerFecha("Fecha final");
+        // El generador de reportes del P1 trabaja con Date; se toma el día completo
+        Date inicio = Date.from(desde.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fin = Date.from(hasta.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        lector.mostrar(comercio.generarReporte(tipo, inicio, fin));
     }
 
     private String pedirTorneo() {

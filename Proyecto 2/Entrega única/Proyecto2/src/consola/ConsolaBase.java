@@ -3,6 +3,7 @@ package consola;
 import java.util.List;
 
 import fachada.FachadaTorneos;
+import fachada.OperacionesComercio;
 import fachada.OperacionRechazadaException;
 
 /**
@@ -15,11 +16,13 @@ public abstract class ConsolaBase {
     private static final int MAX_INTENTOS = 3;
 
     protected final FachadaTorneos fachada;
+    protected final OperacionesComercio comercio;
     protected final LectorEntradas lector;
     protected String loginActual;
 
-    protected ConsolaBase(FachadaTorneos fachada, LectorEntradas lector) {
+    protected ConsolaBase(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {
         this.fachada = fachada;
+        this.comercio = comercio;
         this.lector = lector;
     }
 

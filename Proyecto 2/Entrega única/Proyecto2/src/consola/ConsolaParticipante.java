@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fachada.FachadaTorneos;
+import fachada.OperacionesComercio;
 
 /**
  * Consola para socios, estudiantes y externos: inscripción a torneos,
@@ -11,8 +12,8 @@ import fachada.FachadaTorneos;
  */
 public class ConsolaParticipante extends ConsolaBase {
 
-    public ConsolaParticipante(FachadaTorneos fachada, LectorEntradas lector) {
-        super(fachada, lector);
+    public ConsolaParticipante(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {
+        super(fachada, comercio, lector);
     }
 
     @Override
@@ -41,11 +42,13 @@ public class ConsolaParticipante extends ConsolaBase {
         lector.mostrar("  3. Ver mis torneos");
         lector.mostrar("  4. Ver mis bonos de descuento");
         lector.mostrar("  5. Consultar torneos");
+        lector.mostrar("  6. Comprar en la tienda");
+        lector.mostrar("  7. Comprar en la cafetería");
     }
 
     @Override
     protected int cantidadOpciones() {
-        return 5;
+        return 7;
     }
 
     @Override
@@ -56,6 +59,8 @@ public class ConsolaParticipante extends ConsolaBase {
             case 3 -> mostrarLista("Mis torneos", fachada.listarMisTorneos(loginActual));
             case 4 -> mostrarLista("Mis bonos", fachada.consultarBonos(loginActual));
             case 5 -> consultarTorneos();
+            case 6 -> ejecutar(this::comprarEnTienda);
+            case 7 -> ejecutar(this::comprarEnCafeteria);
             default -> lector.mostrar("Opción no válida.");
         }
         return true;
@@ -131,5 +136,44 @@ public class ConsolaParticipante extends ConsolaBase {
             fachada.desinscribir(loginActual, id);
             lector.mostrar("Se liberó su cupo.");
         }
+    }
+
+    private void comprarEnTienda() {
+        if (!comercio.esSocio(loginActual)) {
+            lector.mostrar("La tienda es solo para socios del club.");
+            return;
+        }
+        List<String> productos = comercio.listarProductos();
+        mostrarLista("Productos", productos);
+        if (productos.isEmpty()) {
+            return;
+        }
+        int producto = lector.leerEntero("Número del producto:", 1, productos.size());
+        int cantidad = lector.leerEntero("Cantidad:", 1, 1000);
+        double subtotal = comercio.calcularSubtotalTienda(producto, cantidad);
+
+        // El bono y el código de empleado no se pueden combinar
+        int codigo = 0;
+        double descuentoBono = 0;
+        List<String> bonos = fachada.consultarBonos(loginActual);
+        if (!bonos.isEmpty() && lector.leerSiNo("Tiene bonos de torneo. ¿Desea usar uno?")) {
+            mostrarLista("Mis bonos", bonos);
+            String idBono = lector.leerTextoNoVacio("Id del bono:");
+            descuentoBono = fachada.canjearBono(loginActual, idBono, subtotal, false);
+        } else if (comercio.cantidadCodigosDescuento() > 0 && lector.leerSiNo("¿Tiene un código de descuento de empleado?")) {
+            codigo = lector.leerEntero("Número del código:", 1, comercio.cantidadCodigosDescuento());
+        }
+        lector.mostrar(comercio.comprarEnTienda(loginActual, producto, cantidad, codigo, descuentoBono));
+    }
+
+    private void comprarEnCafeteria() {
+        List<String> alimentos = comercio.listarAlimentos();
+        mostrarLista("Menú de cafetería", alimentos);
+        if (alimentos.isEmpty()) {
+            return;
+        }
+        int alimento = lector.leerEntero("Número del alimento:", 1, alimentos.size());
+        int cantidad = lector.leerEntero("Cantidad:", 1, 50);
+        lector.mostrar(comercio.venderEnCafeteria(loginActual, alimento, cantidad));
     }
 }
