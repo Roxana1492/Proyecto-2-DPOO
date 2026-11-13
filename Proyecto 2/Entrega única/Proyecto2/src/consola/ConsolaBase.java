@@ -2,6 +2,14 @@ package consola;
 
 import java.util.List;
 
+import comercio.CalculadorPuntos;
+import comercio.GeneradorReportes;
+import comercio.GestorDescuentos;
+import comercio.Impuestos;
+import comercio.ParametroFinanciero;
+import comercio.RegistroTurnos;
+import comercio.ReglaBebidaCaliente;
+import fachada.FachadaClub;
 import fachada.FachadaTorneos;
 import fachada.OperacionesComercio;
 import fachada.OperacionRechazadaException;
@@ -14,6 +22,9 @@ import fachada.OperacionRechazadaException;
 public abstract class ConsolaBase {
 
     private static final int MAX_INTENTOS = 3;
+
+    /** Carpeta de los archivos, relativa a la carpeta del proyecto en Eclipse. */
+    protected static final String CARPETA_DATOS = "datos";
 
     protected final FachadaTorneos fachada;
     protected final OperacionesComercio comercio;
@@ -104,6 +115,21 @@ public abstract class ConsolaBase {
             String id = lector.leerTextoNoVacio("Id del torneo:");
             ejecutar(() -> lector.mostrar(fachada.consultarDetalleTorneo(id)));
         }
+    }
+
+    /**
+     * Arma las clases de comercio del Proyecto 1 (IVA 19%, impuesto al consumo 8%,
+     * puntos 2% y descuento compartido 8%) y la fachada. Lo usan los tres main.
+     */
+    protected static OperacionesComercio crearComercio() {
+        ParametroFinanciero parametros = new ParametroFinanciero(0.19, 0.08, 0.02, 8.0);
+        return new OperacionesComercio(new GestorDescuentos(parametros), new Impuestos(parametros),
+                new CalculadorPuntos(parametros), new ReglaBebidaCaliente(), new RegistroTurnos(),
+                new GeneradorReportes());
+    }
+
+    protected static FachadaClub crearFachada(OperacionesComercio comercio) {
+        return new FachadaClub(CARPETA_DATOS, comercio);
     }
 
     protected abstract String titulo();

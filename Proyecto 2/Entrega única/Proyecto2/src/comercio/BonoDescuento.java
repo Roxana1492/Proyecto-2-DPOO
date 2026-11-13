@@ -17,4 +17,5 @@ public class BonoDescuento {
     public String getLoginSocio() { return loginSocio; }
     public double getPorcentajeDescuento() { return porcentajeDescuento; }
     public boolean isUsado() { return usado; }
+    public void marcarUsado() { this.usado = true; }
 }

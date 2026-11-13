@@ -18,6 +18,11 @@ public class ConsolaAdministrador extends ConsolaBase {
     private static final List<String> MODALIDADES = List.of("CONJUNTO", "INDIVIDUAL", "DOBLES");
     private static final List<String> NIVELES = List.of("PRINCIPIANTE", "INTERMEDIO", "AVANZADO");
 
+    public static void main(String[] args) {
+        OperacionesComercio comercio = crearComercio();
+        new ConsolaAdministrador(crearFachada(comercio), comercio, new LectorEntradas()).iniciar();
+    }
+
     public ConsolaAdministrador(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {
         super(fachada, comercio, lector);
     }

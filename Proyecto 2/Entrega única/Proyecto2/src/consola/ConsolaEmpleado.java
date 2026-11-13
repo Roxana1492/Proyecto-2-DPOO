@@ -11,6 +11,11 @@ import fachada.OperacionesComercio;
  */
 public class ConsolaEmpleado extends ConsolaBase {
 
+    public static void main(String[] args) {
+        OperacionesComercio comercio = crearComercio();
+        new ConsolaEmpleado(crearFachada(comercio), comercio, new LectorEntradas()).iniciar();
+    }
+
     public ConsolaEmpleado(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {
         super(fachada, comercio, lector);
     }

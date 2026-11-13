@@ -13,4 +13,18 @@ Todo lo de la entrega está en `Proyecto 2/Entrega única/`:
 1. En Eclipse: **File → Import → Existing Projects into Workspace**.
 2. Seleccione la carpeta `Proyecto 2/Entrega única/Proyecto2`.
 
-Las instrucciones para ejecutar las tres consolas se agregan cuando estén implementadas.
+## Cómo ejecutar las consolas
+
+Cada consola tiene su propio `main` (clic derecho → **Run As → Java Application**):
+
+| Consola | Clase | Usuarios de prueba |
+|---|---|---|
+| Administrador | `consola.ConsolaAdministrador` | `admin` / `1234` |
+| Socios, estudiantes y externos | `consola.ConsolaParticipante` | `socio1` / `1234` (o crear una cuenta nueva) |
+| Empleados | `consola.ConsolaEmpleado` | `entrenador1` / `1234`, `fisio1` / `1234` |
+
+Los datos se cargan y se guardan en la carpeta `datos/` del proyecto (usuarios, comercio, torneos, inscritos, encuentros, premios y bonos).
+
+## Pruebas
+
+Las pruebas JUnit 5 están en `test/deportivo` (`TorneoTest` y `GestorTorneosTest`): clic derecho en la carpeta `test` → **Run As → JUnit Test**.

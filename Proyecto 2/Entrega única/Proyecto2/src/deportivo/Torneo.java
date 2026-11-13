@@ -1,5 +1,7 @@
 package deportivo;
 
+import fachada.OperacionRechazadaException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +37,28 @@ public class Torneo {
     public Torneo(String idTorneo, String nombre, TipoTorneo tipo, ModalidadTorneo modalidad,
                   String disciplina, LocalDate fechaInicio, int edadMaxima, String nivelRequerido,
                   int cuposTotales, double tarifaInscripcion) {
+        this(idTorneo, nombre, tipo, modalidad, disciplina, fechaInicio, edadMaxima, nivelRequerido,
+             cuposTotales, tarifaInscripcion, true);
+    }
+
+    // Se usa al cargar torneos del archivo: un torneo viejo ya tiene fecha pasada,
+    // entonces no se vuelve a validar la fecha
+    public static Torneo cargarDesdeArchivo(String idTorneo, String nombre, TipoTorneo tipo,
+                                            ModalidadTorneo modalidad, String disciplina,
+                                            LocalDate fechaInicio, int edadMaxima, String nivelRequerido,
+                                            int cuposTotales, double tarifaInscripcion) {
+        return new Torneo(idTorneo, nombre, tipo, modalidad, disciplina, fechaInicio, edadMaxima,
+                          nivelRequerido, cuposTotales, tarifaInscripcion, false);
+    }
+
+    private Torneo(String idTorneo, String nombre, TipoTorneo tipo, ModalidadTorneo modalidad,
+                   String disciplina, LocalDate fechaInicio, int edadMaxima, String nivelRequerido,
+                   int cuposTotales, double tarifaInscripcion, boolean validarFecha) {
 
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new OperacionRechazadaException("El nombre del torneo no puede estar vacío.");
         }
-        if (fechaInicio == null || fechaInicio.isBefore(LocalDate.now())) {
+        if (fechaInicio == null || (validarFecha && fechaInicio.isBefore(LocalDate.now()))) {
             throw new OperacionRechazadaException("La fecha de inicio no puede ser anterior a la fecha actual.");
         }
         if (cuposTotales <= 0) {
@@ -463,4 +482,12 @@ public class Torneo {
     public void setEstado(EstadoTorneo estado) { this.estado = estado; }
     public List<Object> getInscritos() { return inscritos; }
     public List<Encuentro> getCalendario() { return calendario; }
+    public boolean esPreferencial(Object participante) {
+        Boolean valor = esPreferencialPorParticipante.get(participante);
+        return valor != null && valor;
+    }
+    public double getPagoDe(Object participante) {
+        Double valor = pagosPorParticipante.get(participante);
+        return valor == null ? 0.0 : valor;
+    }
 }
