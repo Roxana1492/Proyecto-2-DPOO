@@ -2,6 +2,7 @@ package autenticacion;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import deportivo.Deporte;
 import deportivo.InscripcionJugador;
@@ -28,6 +29,10 @@ public class Socio extends Usuario {
         return fechaNacimiento;
     }
 
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     public int getPuntos() {
         return puntos;
     }
@@ -40,11 +45,25 @@ public class Socio extends Usuario {
         this.inscripciones.add(inscripcion);
     }
 
+    // Método para calcular la edad usando Calendar (compatible con Date)
     public int calcularEdad() {
-        Date fechaActual = new Date();
-        long diff = fechaActual.getTime() - fechaNacimiento.getTime();
-        long anos = diff / (1000L * 60 * 60 * 24 * 365);
-        return (int) anos;
+        if (this.fechaNacimiento == null) {
+            return 0; 
+        }
+        
+        Calendar fechaNac = Calendar.getInstance();
+        fechaNac.setTime(this.fechaNacimiento);
+        
+        Calendar fechaActual = Calendar.getInstance();
+        
+        int edad = fechaActual.get(Calendar.YEAR) - fechaNac.get(Calendar.YEAR);
+        
+        // Validar si aún no ha cumplido años en el año actual
+        if (fechaActual.get(Calendar.DAY_OF_YEAR) < fechaNac.get(Calendar.DAY_OF_YEAR)) {
+            edad--;
+        }
+        
+        return edad;
     }
 
     public boolean estaInscritoEn(Deporte deporte) {

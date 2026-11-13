@@ -11,15 +11,15 @@ import java.util.*;
 
 public class Prueba1 {
 
-    // Método auxiliar para generar fechas dinámicas basadas en la fecha actual
+    // Método auxiliar corregido para generar fechas Date basadas en los años atrás
     private static Date fechaNacimientoHaceAnos(int anos) {
-        LocalDate fecha = LocalDate.now().minusYears(anos);
-        return Date.from(fecha.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        LocalDate fechaLocal = LocalDate.now().minusYears(anos);
+        return Date.from(fechaLocal.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     public static void main(String[] args) {
         System.out.println("==========================================================================================================");
-        System.out.println("   PRUEBA 1: VERIFICACIÓN E INSCRIPCIÓN DE JUGADORES EN EQUIPOS (ENTREGA 1 / DPOO)");
+        System.out.println("    PRUEBA 1: VERIFICACIÓN E INSCRIPCIÓN DE JUGADORES EN EQUIPOS (ENTREGA 1 / DPOO)");
         System.out.println("==========================================================================================================");
 
         Map<String, Socio> socios = new HashMap<>();
@@ -61,7 +61,7 @@ public class Prueba1 {
 
         VerificacionInscripcion verificador = new VerificacionInscripcion();
 
-        Equipo equipoMasc = equipos.get(0);          // Los Cracks FC (Fútbol)
+        Equipo equipoMasc = equipos.get(0);         // Los Cracks FC (Fútbol)
         Equipo equipoSegundoFutbol = equipos.get(1); // Tigres FC (Fútbol)
         Equipo equipoLleno = equipos.get(2);         // Cancha Llena FC (Fútbol)
         Equipo equipoBaloncesto = equipos.get(3);    // Eagles Basketball (Baloncesto)
@@ -112,7 +112,7 @@ public class Prueba1 {
     }
 
     private static void procesarInscripcion(String nombreCaso, VerificacionInscripcion verificador, 
-                                             Socio socio, Equipo equipo, int camiseta, String posicion, boolean esperadoAprobado) {
+                                          Socio socio, Equipo equipo, int camiseta, String posicion, boolean esperadoAprobado) {
 
         String motivo = verificador.verificar(socio, equipo, camiseta);
         boolean aprobado = motivo.isEmpty();

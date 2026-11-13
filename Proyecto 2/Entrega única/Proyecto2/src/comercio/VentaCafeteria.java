@@ -9,8 +9,8 @@ public class VentaCafeteria extends Venta {
     private double propina;
     private List<DetalleVentaCafeteria> detalles;
 
-    public VentaCafeteria(Date fecha, double subtotal, double total, int puntosFidelidadGenerados, double impuestoConsumo, double propina) {
-        super(fecha, subtotal, total, puntosFidelidadGenerados);
+    public VentaCafeteria(Date Date, double subtotal, double total, int puntosFidelidadGenerados, double impuestoConsumo, double propina) {
+        super(Date, subtotal, total, puntosFidelidadGenerados);
         this.impuestoConsumo = impuestoConsumo;
         this.propina = propina;
         this.detalles = new ArrayList<>();
