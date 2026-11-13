@@ -1,0 +1,4 @@
+T1;entrenador1;Laura Gómez;Sabado;08:00-12:00;Gimnasio;ENTRENADOR
+T2;entrenador2;Andrés Rojas;Sabado;08:00-12:00;Gimnasio;ENTRENADOR
+T3;e3;Entrenador 3;Sabado;08:00-12:00;Gimnasio;ENTRENADOR
+T4;fisio1;Paula Méndez;Sabado;08:00-12:00;Fisioterapia;FISIOTERAPEUTA

@@ -1,0 +1,2 @@
+# porcentajeEmpleado;porcentajeCompartido;loginPropietario
+15;8;entrenador1

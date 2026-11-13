@@ -1,0 +1,4 @@
+# BEBIDA;nombre;precio;caliente|fria  o  SNACK;nombre;precio
+BEBIDA;Café americano;5000;caliente
+BEBIDA;Limonada;6000;fria
+SNACK;Galletas;3000

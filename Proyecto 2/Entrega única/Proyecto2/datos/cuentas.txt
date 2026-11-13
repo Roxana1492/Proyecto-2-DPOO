@@ -1,0 +1,2 @@
+socio1;0
+socio2;0

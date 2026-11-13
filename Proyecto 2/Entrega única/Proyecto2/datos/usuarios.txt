@@ -1,0 +1,7 @@
+# tipo;login;password;nombre;fechaNacimiento
+ADMINISTRADOR;admin;1234;Administrador;
+SOCIO;socio1;1234;Carlos Pérez;2001-04-15
+SOCIO;socio2;1234;Ana Torres;1998-09-02
+ENTRENADOR;entrenador1;1234;Laura Gómez;
+ENTRENADOR;entrenador2;1234;Andrés Rojas;
+FISIOTERAPEUTA;fisio1;1234;Paula Méndez;
