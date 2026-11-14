@@ -122,6 +122,12 @@ public class ClubFachada implements FachadaTorneos {
     }
 
     @Override
+    public void liberarCuposPreferenciales(String loginAdmin, String idTorneo) {
+        validarAdministrador(loginAdmin);
+        gestorTorneos.buscar(idTorneo).liberarCuposPreferenciales();
+    }
+
+    @Override
     public void iniciarTorneo(String loginAdmin, String idTorneo) {
         validarAdministrador(loginAdmin);
         gestorTorneos.buscar(idTorneo).iniciar(LocalDate.now());

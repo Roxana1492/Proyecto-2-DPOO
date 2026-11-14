@@ -148,6 +148,26 @@ public class TorneoTest {
         assertEquals(40000.0, t.calcularCobro(new Jugador(socio("a", null))), 0.01);
     }
 
+    // ---------------- HU-T14: liberación de preferenciales ----------------
+
+    @Test
+    public void testLiberarPreferencialesLosVuelveRegulares() {
+        TorneoRecreativo t = recreativo(Modalidad.INDIVIDUAL, 10);
+        t.liberarCuposPreferenciales();
+        assertEquals(0, t.cuposPreferencialesLibres());
+        assertEquals(10, t.cuposRegularesLibres());
+        assertThrows(OperacionRechazadaException.class, () -> t.liberarCuposPreferenciales());
+    }
+
+    @Test
+    public void testNoSeLiberaConElTorneoEnCurso() {
+        TorneoRecreativo t = recreativo(Modalidad.INDIVIDUAL, 10);
+        inscribir(t, socio("a", null), false);
+        inscribir(t, socio("b", null), false);
+        t.iniciar(HOY);
+        assertThrows(OperacionRechazadaException.class, () -> t.liberarCuposPreferenciales());
+    }
+
     // ---------------- HU-T05: desinscripción ----------------
 
     @Test

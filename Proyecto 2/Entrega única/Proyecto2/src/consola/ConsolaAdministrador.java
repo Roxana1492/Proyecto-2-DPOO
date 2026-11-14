@@ -48,11 +48,12 @@ public class ConsolaAdministrador extends ConsolaBase {
         lector.mostrar("  4. Finalizar torneo");
         lector.mostrar("  5. Consultar torneos");
         lector.mostrar("  6. Reporte de ventas (tienda y cafetería)");
+        lector.mostrar("  7. Liberar cupos preferenciales");
     }
 
     @Override
     protected int cantidadOpciones() {
-        return 6;
+        return 7;
     }
 
     @Override
@@ -64,6 +65,7 @@ public class ConsolaAdministrador extends ConsolaBase {
             case 4 -> ejecutar(this::finalizarTorneo);
             case 5 -> consultarTorneos();
             case 6 -> ejecutar(this::generarReporte);
+            case 7 -> ejecutar(this::liberarCupos);
             default -> lector.mostrar("Opción no válida.");
         }
         return true;
@@ -133,6 +135,12 @@ public class ConsolaAdministrador extends ConsolaBase {
         Date inicio = Date.from(desde.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date fin = Date.from(hasta.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         lector.mostrar(comercio.generarReporte(tipo, inicio, fin));
+    }
+
+    private void liberarCupos() {
+        String id = pedirTorneo();
+        fachada.liberarCuposPreferenciales(loginActual, id);
+        lector.mostrar("Los cupos preferenciales libres pasaron a ser regulares.");
     }
 
     private String pedirTorneo() {

@@ -197,7 +197,7 @@ public class PersistenciaClub {
         Map<String, Torneo> torneos = new HashMap<>();
         Map<String, String[]> lineas = new HashMap<>();
 
-        // id;tipo;nombre;disciplina;modalidad;fecha;edadMaxima;nivel;cupos;tarifa;estado
+        // id;tipo;nombre;disciplina;modalidad;fecha;edadMaxima;nivel;cupos;tarifa;estado;cuposPreferenciales
         for (String[] p : PersistenciaComercio.leerLineas(ruta("torneos.txt"))) {
             if (p.length < 11) {
                 continue;
@@ -212,6 +212,9 @@ public class PersistenciaClub {
                 t = new TorneoCompetitivo(p[0], p[2], p[3], modalidad, fecha, categoria, cupos, Double.parseDouble(p[9]));
             } else {
                 t = new TorneoRecreativo(p[0], p[2], p[3], modalidad, fecha, categoria, cupos);
+            }
+            if (p.length > 11) {
+                t.setCuposPreferenciales(Integer.parseInt(p[11])); // por si se liberaron (HU-T14)
             }
             gestor.agregar(t);
             torneos.put(t.getId(), t);
@@ -255,7 +258,7 @@ public class PersistenciaClub {
     public void guardarTorneos(GestorTorneos gestor) throws Exception {
         List<Torneo> torneos = gestor.listar();
         try (PrintWriter pw = abrir("torneos.txt")) {
-            pw.println("# id;tipo;nombre;disciplina;modalidad;fecha;edadMaxima;nivel;cupos;tarifa;estado");
+            pw.println("# id;tipo;nombre;disciplina;modalidad;fecha;edadMaxima;nivel;cupos;tarifa;estado;cuposPreferenciales");
             for (Torneo t : torneos) {
                 String tipo = t instanceof TorneoCompetitivo ? "COMPETITIVO" : "RECREATIVO";
                 double tarifa = t instanceof TorneoCompetitivo ? ((TorneoCompetitivo) t).getTarifa() : 0;
@@ -263,7 +266,7 @@ public class PersistenciaClub {
                 pw.println(t.getId() + ";" + tipo + ";" + t.getNombre() + ";" + t.getDisciplina() + ";"
                         + t.getModalidad() + ";" + t.getFecha() + ";" + (edad == null ? "" : edad) + ";"
                         + escribirNivel(t.getCategoria().getNivel()) + ";" + t.getCuposTotales() + ";" + tarifa
-                        + ";" + t.getEstado());
+                        + ";" + t.getEstado() + ";" + t.getCuposPreferenciales());
             }
         }
         try (PrintWriter pw = abrir("inscripciones.txt")) {

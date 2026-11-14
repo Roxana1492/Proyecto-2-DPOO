@@ -58,6 +58,9 @@ public interface FachadaTorneos {
             String disciplina, LocalDate fecha, Integer edadMaxima, String nivel,
             int cuposTotales, double tarifa);
 
+    /** HU-T14. Pasa a regulares los cupos preferenciales que nadie ha ocupado. */
+    void liberarCuposPreferenciales(String loginAdmin, String idTorneo);
+
     /** HU-T04 + HU-T13. Cambia a "En curso", libera preferenciales y genera el calendario. */
     void iniciarTorneo(String loginAdmin, String idTorneo);
 

@@ -131,6 +131,18 @@ public abstract class Torneo {
         return inscripcion;
     }
 
+    // HU-T14: los preferenciales que nadie ocupó pasan a ser regulares
+    public void liberarCuposPreferenciales() {
+        if (estado != EstadoTorneo.INSCRIPCIONES_ABIERTAS) {
+            throw new OperacionRechazadaException("Solo se pueden liberar cupos con las inscripciones abiertas.");
+        }
+        int libres = cuposPreferencialesLibres();
+        if (libres == 0) {
+            throw new OperacionRechazadaException("No hay cupos preferenciales pendientes por liberar.");
+        }
+        cuposPreferenciales -= libres;
+    }
+
     // HU-T04 y HU-T13: cambia a En curso y arma el calendario
     public void iniciar(LocalDate hoy) {
         if (estado != EstadoTorneo.INSCRIPCIONES_ABIERTAS) {
@@ -268,6 +280,7 @@ public abstract class Torneo {
     public Categoria getCategoria() { return categoria; }
     public int getCuposTotales() { return cuposTotales; }
     public int getCuposPreferenciales() { return cuposPreferenciales; }
+    public void setCuposPreferenciales(int cuposPreferenciales) { this.cuposPreferenciales = cuposPreferenciales; }
     public EstadoTorneo getEstado() { return estado; }
     public void setEstado(EstadoTorneo estado) { this.estado = estado; }
     public boolean isPremiosEntregados() { return premiosEntregados; }
