@@ -9,7 +9,8 @@ import comercio.Impuestos;
 import comercio.ParametroFinanciero;
 import comercio.RegistroTurnos;
 import comercio.ReglaBebidaCaliente;
-import fachada.FachadaClub;
+import persistencia.PersistenciaClub;
+import fachada.ClubFachada;
 import fachada.FachadaTorneos;
 import fachada.OperacionesComercio;
 import fachada.OperacionRechazadaException;
@@ -119,17 +120,17 @@ public abstract class ConsolaBase {
 
     /**
      * Arma las clases de comercio del Proyecto 1 (IVA 19%, impuesto al consumo 8%,
-     * puntos 2% y descuento compartido 8%) y la fachada. Lo usan los tres main.
+     * puntos 2% y descuento compartido 8%). El registro de turnos se comparte con
+     * la fachada para revisar si un empleado tiene turno el día de un torneo.
      */
-    protected static OperacionesComercio crearComercio() {
+    protected static OperacionesComercio crearComercio(RegistroTurnos turnos) {
         ParametroFinanciero parametros = new ParametroFinanciero(0.19, 0.08, 0.02, 8.0);
         return new OperacionesComercio(new GestorDescuentos(parametros), new Impuestos(parametros),
-                new CalculadorPuntos(parametros), new ReglaBebidaCaliente(), new RegistroTurnos(),
-                new GeneradorReportes());
+                new CalculadorPuntos(parametros), new ReglaBebidaCaliente(), turnos, new GeneradorReportes());
     }
 
-    protected static FachadaClub crearFachada(OperacionesComercio comercio) {
-        return new FachadaClub(CARPETA_DATOS, comercio);
+    protected static ClubFachada crearFachada(OperacionesComercio comercio, RegistroTurnos turnos) {
+        return new ClubFachada(comercio, turnos, new PersistenciaClub(CARPETA_DATOS));
     }
 
     protected abstract String titulo();

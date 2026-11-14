@@ -2,6 +2,7 @@ package consola;
 
 import java.util.List;
 
+import comercio.RegistroTurnos;
 import fachada.FachadaTorneos;
 import fachada.OperacionesComercio;
 
@@ -12,8 +13,9 @@ import fachada.OperacionesComercio;
 public class ConsolaEmpleado extends ConsolaBase {
 
     public static void main(String[] args) {
-        OperacionesComercio comercio = crearComercio();
-        new ConsolaEmpleado(crearFachada(comercio), comercio, new LectorEntradas()).iniciar();
+        RegistroTurnos turnos = new RegistroTurnos();
+        OperacionesComercio comercio = crearComercio(turnos);
+        new ConsolaEmpleado(crearFachada(comercio, turnos), comercio, new LectorEntradas()).iniciar();
     }
 
     public ConsolaEmpleado(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {

@@ -6,4 +6,8 @@ public class Administrador extends Usuario {
         super(login, password);
     }
 
+    @Override
+    public String darNombre() {
+        return "Administrador";
+    }
 }

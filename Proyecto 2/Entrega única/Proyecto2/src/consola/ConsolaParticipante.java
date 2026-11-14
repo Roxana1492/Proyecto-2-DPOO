@@ -3,6 +3,7 @@ package consola;
 import java.util.ArrayList;
 import java.util.List;
 
+import comercio.RegistroTurnos;
 import fachada.FachadaTorneos;
 import fachada.OperacionesComercio;
 
@@ -13,8 +14,9 @@ import fachada.OperacionesComercio;
 public class ConsolaParticipante extends ConsolaBase {
 
     public static void main(String[] args) {
-        OperacionesComercio comercio = crearComercio();
-        new ConsolaParticipante(crearFachada(comercio), comercio, new LectorEntradas()).iniciar();
+        RegistroTurnos turnos = new RegistroTurnos();
+        OperacionesComercio comercio = crearComercio(turnos);
+        new ConsolaParticipante(crearFachada(comercio, turnos), comercio, new LectorEntradas()).iniciar();
     }
 
     public ConsolaParticipante(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {

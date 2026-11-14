@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import comercio.RegistroTurnos;
 import fachada.FachadaTorneos;
 import fachada.OperacionesComercio;
 
@@ -19,8 +20,9 @@ public class ConsolaAdministrador extends ConsolaBase {
     private static final List<String> NIVELES = List.of("PRINCIPIANTE", "INTERMEDIO", "AVANZADO");
 
     public static void main(String[] args) {
-        OperacionesComercio comercio = crearComercio();
-        new ConsolaAdministrador(crearFachada(comercio), comercio, new LectorEntradas()).iniciar();
+        RegistroTurnos turnos = new RegistroTurnos();
+        OperacionesComercio comercio = crearComercio(turnos);
+        new ConsolaAdministrador(crearFachada(comercio, turnos), comercio, new LectorEntradas()).iniciar();
     }
 
     public ConsolaAdministrador(FachadaTorneos fachada, OperacionesComercio comercio, LectorEntradas lector) {

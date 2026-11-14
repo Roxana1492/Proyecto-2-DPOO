@@ -3,35 +3,67 @@ package deportivo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Equipo inscrito en un torneo de modalidad Conjunto.
- * Se guarda el login del capitán y de los demás integrantes.
- */
-public class EquipoTorneo {
+import autenticacion.Socio;
+import autenticacion.Usuario;
+
+/** Equipo inscrito en un torneo de conjunto. Solo puede tener socios. */
+public class EquipoTorneo implements ParticipanteTorneo {
 
     private String nombre;
-    private String loginCapitan;
-    private List<String> integrantes;
+    private Socio capitan;
+    private List<Socio> integrantes;
 
-    public EquipoTorneo(String nombre, String loginCapitan, List<String> integrantes) {
+    public EquipoTorneo(String nombre, Socio capitan, List<Socio> integrantes) {
         this.nombre = nombre;
-        this.loginCapitan = loginCapitan;
+        this.capitan = capitan;
         this.integrantes = new ArrayList<>(integrantes);
     }
 
     public String getNombre() { return nombre; }
-    public String getLoginCapitan() { return loginCapitan; }
-    public List<String> getIntegrantes() { return integrantes; }
+    public Socio getCapitan() { return capitan; }
+    public List<Socio> getIntegrantes() { return integrantes; }
 
-    // El capitán también cuenta como integrante
-    public boolean tieneIntegrante(String login) {
-        return loginCapitan.equals(login) || integrantes.contains(login);
+    public boolean esCapitan(String login) {
+        return capitan.getLogin().equals(login);
     }
 
-    public List<String> todosLosLogins() {
-        List<String> logins = new ArrayList<>();
-        logins.add(loginCapitan);
-        logins.addAll(integrantes);
-        return logins;
+    @Override
+    public String darNombre() {
+        return "Equipo " + nombre;
+    }
+
+    // El capitán también juega, entonces va de primero en la lista
+    @Override
+    public List<Usuario> darIntegrantes() {
+        List<Usuario> lista = new ArrayList<>();
+        lista.add(capitan);
+        lista.addAll(integrantes);
+        return lista;
+    }
+
+    @Override
+    public double promedioElo(String disciplina) {
+        List<Usuario> todos = darIntegrantes();
+        double suma = 0;
+        for (Usuario u : todos) {
+            suma += u.darElo(disciplina);
+        }
+        return suma / todos.size();
+    }
+
+    // Un equipo es solo de socios
+    @Override
+    public boolean incluyeEmpleado() {
+        return false;
+    }
+
+    @Override
+    public boolean contiene(String login) {
+        for (Usuario u : darIntegrantes()) {
+            if (u.getLogin().equals(login)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

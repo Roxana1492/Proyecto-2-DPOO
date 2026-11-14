@@ -20,11 +20,11 @@ Cada consola tiene su propio `main` (clic derecho → **Run As → Java Applicat
 | Consola | Clase | Usuarios de prueba |
 |---|---|---|
 | Administrador | `consola.ConsolaAdministrador` | `admin` / `1234` |
-| Socios, estudiantes y externos | `consola.ConsolaParticipante` | `socio1` / `1234` (o crear una cuenta nueva) |
+| Socios, estudiantes y externos | `consola.ConsolaParticipante` | `socio1` / `1234` (o crear una cuenta nueva; los códigos estudiantiles válidos están en `datos/matriculas.txt`) |
 | Empleados | `consola.ConsolaEmpleado` | `entrenador1` / `1234`, `fisio1` / `1234` |
 
-Los datos se cargan y se guardan en la carpeta `datos/` del proyecto (usuarios, comercio, torneos, inscritos, encuentros, premios y bonos).
+Los datos se cargan y se guardan en la carpeta `datos/` del proyecto: `usuarios.txt`, `matriculas.txt`, `torneos.txt`, `inscripciones.txt`, `encuentros.txt`, `premios.txt`, `bonos.txt` y los archivos de comercio del Proyecto 1.
 
 ## Pruebas
 
-Las pruebas JUnit 5 están en `test/deportivo` (`TorneoTest` y `GestorTorneosTest`): clic derecho en la carpeta `test` → **Run As → JUnit Test**.
+Las pruebas JUnit 5 están en la carpeta `test`: `TorneoTest`, `TablaTorneoTest`, `BonoDescuentoTest`, `GestorTorneosTest` (paquete `deportivo`) y `ClubFachadaTest` (paquete `fachada`). Clic derecho en la carpeta `test` → **Run As → JUnit Test**.
